@@ -1,0 +1,16 @@
+language: minimal
+
+services:
+  - docker
+
+before_script:
+  - docker --version
+  - docker compose version
+
+script:
+  - docker compose build
+  - docker compose up -d
+  - sleep 15
+  - docker compose ps
+  - docker compose logs api
+  - docker compose down
