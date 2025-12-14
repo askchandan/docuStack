@@ -21,9 +21,13 @@ jobs:
         run: docker compose build
 
       - name: Start services
+        env:
+            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         run: |
-          docker compose up -d
-          sleep 30
+            docker compose up -d
+            sleep 30
 
       - name: Verify running containers
         run: docker compose ps
