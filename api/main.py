@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import psycopg2
+import redis
 import os
 
 app = FastAPI()
@@ -12,11 +13,25 @@ def get_db_connection():
         password=os.getenv("POSTGRES_PASSWORD"),
     )
 
+def get_redis_connection():
+    return redis.Redis(host="redis", port=6379)
+
 @app.get("/")
 def health():
+    status = {}
+
     try:
         conn = get_db_connection()
         conn.close()
-        return {"status": "API running and DB connected"}
+        status["database"] = "connected"
     except Exception as e:
-        return {"status": "API running but DB not reachable", "error": str(e)}
+        status["database"] = str(e)
+
+    try:
+        r = get_redis_connection()
+        r.ping()
+        status["redis"] = "connected"
+    except Exception as e:
+        status["redis"] = str(e)
+
+    return status
