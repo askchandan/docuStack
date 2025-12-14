@@ -23,7 +23,7 @@ jobs:
       - name: Start services
         run: |
           docker compose up -d
-          sleep 20
+          sleep 30
 
       - name: Verify running containers
         run: docker compose ps
