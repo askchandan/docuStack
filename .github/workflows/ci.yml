@@ -36,4 +36,5 @@ jobs:
         run: docker compose logs api
 
       - name: Shutdown services
+        if: always()
         run: docker compose down
